@@ -404,8 +404,8 @@
 
 <script>
   // API endpoint — unchanged, pure UI improvement
-  //const API = "http://localhost:5000/students";
-  const API = "http://4.240.91.254/students";
+  //const API = "http://localhost:5001/students";
+  const API = "http://4.240.91.254:5001/students";
   let editId = null;
 
   // Helper: load students with realistic UI handling (preserves logic)
@@ -442,7 +442,7 @@
       `).join("");
     } catch (err) {
       console.warn("Load error:", err);
-      document.getElementById("list").innerHTML = `<tr class="empty-row"><td colspan="5">⚠️ Cannot connect to server. Make sure backend runs on port 5000</td></tr>`;
+      document.getElementById("list").innerHTML = `<tr class="empty-row"><td colspan="5">⚠️ Cannot connect to server. Make sure backend runs on port 5001</td></tr>`;
     }
   }
 
