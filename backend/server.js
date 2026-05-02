@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 /* ---------------- ENV CONFIG ---------------- */
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // ⚠️ Move this to .env later
 const MONGO_URI = "mongodb+srv://Sayalip:sayali123@cluster1.vrhcdez.mongodb.net/studentDB?retryWrites=true&w=majority";
