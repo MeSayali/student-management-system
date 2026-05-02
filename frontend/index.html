@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>EduTrack | Student Management System</title>
+  <!-- Google Fonts & subtle modern reset -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      background: linear-gradient(145deg, #e9eff5 0%, #dce5ef 100%);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    /* main container with subtle depth */
+    .app-wrapper {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* modern glassmorphic header */
+    .header {
+      background: rgba(18, 35, 60, 0.92);
+      backdrop-filter: blur(4px);
+      background: linear-gradient(135deg, #0a2a44 0%, #0f3b5f 100%);
+      border-radius: 2rem;
+      margin-bottom: 2rem;
+      padding: 1.2rem 2rem;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 3px 8px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .header h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      background: linear-gradient(120deg, #fff, #cfddee);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header h1::before {
+      content: "🎓";
+      font-size: 2rem;
+      background: none;
+      -webkit-background-clip: unset;
+      color: #ffe6b3;
+    }
+
+    .subhead {
+      color: #bfd9f0;
+      font-size: 0.85rem;
+      margin-top: 6px;
+      font-weight: 400;
+      letter-spacing: 0.3px;
+    }
+
+    /* card style elevated */
+    .card {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(0px);
+      border-radius: 28px;
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.02);
+      padding: 1.8rem 2rem;
+      margin-bottom: 2rem;
+      transition: transform 0.2s ease, box-shadow 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .card:hover {
+      box-shadow: 0 24px 42px -16px rgba(0, 0, 0, 0.25);
+    }
+
+    .form-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #112f44;
+      margin-bottom: 1.2rem;
+      border-left: 5px solid #2c7da0;
+      padding-left: 1rem;
+      letter-spacing: -0.2px;
+    }
+
+    /* form grid modern */
+    .form-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: flex-end;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+      flex: 1 1 180px;
+      min-width: 160px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #3a5a78;
+      margin-bottom: 0.3rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      font-size: 0.95rem;
+      font-family: 'Inter', monospace;
+      border: 1.5px solid #dce5f0;
+      border-radius: 20px;
+      background: #ffffff;
+      transition: all 0.2s;
+      outline: none;
+      font-weight: 500;
+      color: #1a2c3e;
+    }
+
+    input:focus, select:focus {
+      border-color: #2c7da0;
+      box-shadow: 0 0 0 3px rgba(44, 125, 160, 0.2);
+    }
+
+    /* button modern styling */
+    .btn {
+      border: none;
+      border-radius: 40px;
+      padding: 0.85rem 1.8rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      letter-spacing: 0.2px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-primary {
+      background: linear-gradient(115deg, #1b5e7a, #0f4c64);
+      color: white;
+      box-shadow: 0 5px 12px rgba(27, 94, 122, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(115deg, #0f4c64, #0a3e52);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px -8px rgba(15, 76, 100, 0.4);
+    }
+
+    .btn-warning {
+      background: linear-gradient(115deg, #e68a2e, #d9731a);
+      color: white;
+      box-shadow: 0 4px 10px rgba(217, 115, 26, 0.25);
+    }
+
+    .btn-warning:hover {
+      background: linear-gradient(115deg, #d9731a, #c46210);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline-light {
+      background: #f0f4fa;
+      color: #1f5e7e;
+      border: 1px solid #cbdbe2;
+    }
+
+    .btn-outline-light:hover {
+      background: #e4ebf3;
+      transform: translateY(-1px);
+    }
+
+    /* table design */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 24px;
+      background: #ffffff;
+      margin-top: 0.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.9rem;
+      min-width: 600px;
+    }
+
+    th {
+      background: #112f44;
+      color: white;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 1rem 0.8rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border: none;
+    }
+
+    th:first-child {
+      border-top-left-radius: 20px;
+    }
+
+    th:last-child {
+      border-top-right-radius: 20px;
+    }
+
+    td {
+      padding: 1rem 0.8rem;
+      border-bottom: 1px solid #eef2f8;
+      background-color: #fff;
+      vertical-align: middle;
+      font-weight: 500;
+      color: #1f384e;
+    }
+
+    tr:last-child td:first-child {
+      border-bottom-left-radius: 20px;
+    }
+    tr:last-child td:last-child {
+      border-bottom-right-radius: 20px;
+    }
+
+    tr:hover td {
+      background-color: #f8fbfe;
+      transition: 0.1s;
+    }
+
+    /* action buttons inside table */
+    .action-group {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-icon {
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: #eef2fc;
+      color: #1e4663;
+    }
+
+    .btn-icon.edit {
+      background: #e3f0fd;
+      color: #0a6b8c;
+    }
+
+    .btn-icon.edit:hover {
+      background: #cbe5fe;
+      transform: scale(0.96);
+    }
+
+    .btn-icon.delete {
+      background: #ffe9e9;
+      color: #bc4e4e;
+    }
+
+    .btn-icon.delete:hover {
+      background: #ffd8d8;
+      transform: scale(0.96);
+    }
+
+    /* update button specific (hidden by default) */
+    .update {
+      display: none;
+    }
+
+    /* empty row / subtle message */
+    .empty-row td {
+      text-align: center;
+      padding: 2rem;
+      color: #7f8c9a;
+      font-style: italic;
+    }
+
+    /* status badge for marks? optional just keep marks clean */
+    .marks-badge {
+      background: #ecf9f0;
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      display: inline-block;
+      color: #2b6e3b;
+    }
+
+    /* Responsiveness */
+    @media (max-width: 700px) {
+      .form-grid {
+        flex-direction: column;
+      }
+      .card {
+        padding: 1.3rem;
+      }
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      .header h1 {
+        font-size: 1.4rem;
+      }
+    }
+
+    /* modern scroll */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #e2e8f0;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #8aa3bc;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+<div class="app-wrapper">
+  <div class="header">
+    <h1>EduTrack · Student Nexus</h1>
+    <div class="subhead">centralized academic hub | real-time management</div>
+  </div>
+
+  <div class="card">
+    <div class="form-title">📌 Registration &amp; Updates</div>
+    <div class="form-grid">
+      <div class="input-group">
+        <label>📛 FULL NAME</label>
+        <input type="text" id="name" placeholder="e.g., Priya Sharma" autocomplete="off">
+      </div>
+      <div class="input-group">
+        <label>🆔 ROLL NUMBER</label>
+        <input type="text" id="rollNo" placeholder="e.g., CS2401">
+      </div>
+      <div class="input-group">
+        <label>🏛️ DEPARTMENT</label>
+        <select id="dept">
+          <option value="Computer">💻 Computer Science</option>
+          <option value="IT">🌐 Information Technology</option>
+          <option value="AI">🤖 Artificial Intelligence</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>📊 MARKS (0-100)</label>
+        <input type="text" id="marks" placeholder="e.g., 89">
+      </div>
+      <div class="input-group" style="flex: 0 0 auto;">
+        <button class="btn btn-primary add" onclick="addStudent()">➕ Add Student</button>
+        <button class="btn btn-warning update" onclick="updateStudent()">✏️ Update Record</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="padding: 0.8rem 0 1.2rem 0; overflow: hidden;">
+    <div style="padding: 0 1.8rem; margin-bottom: 1rem;">
+      <div class="form-title" style="margin-bottom: 0;">📋 Student Directory</div>
+      <p style="font-size: 0.75rem; color: #5f7f9a;">manage, edit or remove entries — changes sync instantly</p>
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Roll No</th>
+            <th>Department</th>
+            <th>Marks</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="list"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // API endpoint — unchanged, pure UI improvement
+  //const API = "http://localhost:5000/students";
+  const API = "http://127.0.0.1:5000/students";
+  let editId = null;
+
+  // Helper: load students with realistic UI handling (preserves logic)
+  async function loadStudents() {
+    try {
+      const res = await fetch(API);
+      if (!res.ok) throw new Error("Network response error");
+      const data = await res.json();
+
+      const tbody = document.getElementById("list");
+      if (!data.length) {
+        tbody.innerHTML = `<tr class="empty-row"><td colspan="5">✨ No students enrolled yet. Add your first record! ✨</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = data.map(s => `
+        <tr>
+          <td><strong>${escapeHtml(s.name)}</strong></td>
+          <td>${escapeHtml(s.rollNo)}</td>
+          <td><span style="background:#eef2fa; padding:4px 12px; border-radius:30px;">${escapeHtml(s.department)}</span></td>
+          <td><span class="marks-badge">📈 ${s.marks}%</span></td>
+          <td>
+            <div class="action-group">
+              <button class="btn-icon edit" 
+                onclick="editStudent('${s._id}','${escapeHtml(s.name)}','${escapeHtml(s.rollNo)}','${escapeHtml(s.department)}','${s.marks}')">
+                ✏️ Edit
+              </button>
+              <button class="btn-icon delete" onclick="deleteStudent('${s._id}')">
+                🗑️ Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    } catch (err) {
+      console.warn("Load error:", err);
+      document.getElementById("list").innerHTML = `<tr class="empty-row"><td colspan="5">⚠️ Cannot connect to server. Make sure backend runs on port 5000</td></tr>`;
+    }
+  }
+
+  // simple XSS protection (preserves all original data flow)
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+      return c;
+    });
+  }
+
+  // ADD student (original logic, but now with visual validation micro feedback)
+  async function addStudent() {
+    const nameInput = document.getElementById("name");
+    const rollInput = document.getElementById("rollNo");
+    const deptSelect = document.getElementById("dept");
+    const marksInput = document.getElementById("marks");
+
+    const nameVal = nameInput.value.trim();
+    const rollVal = rollInput.value.trim();
+    const marksVal = marksInput.value.trim();
+
+    if (!nameVal || !rollVal || !marksVal) {
+      showToast("⚠️ Please fill all fields (Name, Roll No, Marks)", "#d9534f");
+      return;
+    }
+    if (isNaN(marksVal) || marksVal === "" || marksVal < 0 || marksVal > 100) {
+      showToast("📉 Marks must be a number between 0–100", "#e67e22");
+      return;
+    }
+
+    try {
+      await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: nameVal,
+          rollNo: rollVal,
+          department: deptSelect.value,
+          marks: marksVal
+        })
+      });
+      clearForm();
+      resetUpdateMode(false);
+      await loadStudents();
+      showToast("✅ Student added successfully", "#2c7a47");
+    } catch (err) {
+      showToast("❌ Add failed. Check backend connection", "#a94442");
+    }
+  }
+
+  // DELETE student
+  async function deleteStudent(id) {
+    if (!confirm("⚠️ Permanently remove this student record?")) return;
+    try {
+      await fetch(`${API}/${id}`, { method: "DELETE" });
+      // if currently editing the deleted record, reset UI
+      if (editId === id) {
+        clearForm();
+        resetUpdateMode(false);
+        editId = null;
+      }
+      await loadStudents();
+      showToast("🗑️ Student record deleted", "#5a6268");
+    } catch (err) {
+      showToast("Delete error, backend unreachable", "#a94442");
+    }
+  }
+
+  // EDIT (populate form)
+  function editStudent(id, n, r, d, m) {
+    editId = id;
+    document.getElementById("name").value = n;
+    document.getElementById("rollNo").value = r;
+    document.getElementById("dept").value = d;
+    document.getElementById("marks").value = m;
+
+    // switch button visibility: hide add, show update
+    resetUpdateMode(true);
+    // smooth scroll to form
+    document.querySelector(".card").scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  // UPDATE student
+  async function updateStudent() {
+    if (!editId) {
+      showToast("⚠️ No student selected for update", "#e67e22");
+      return;
+    }
+    const nameVal = document.getElementById("name").value.trim();
+    const rollVal = document.getElementById("rollNo").value.trim();
+    const deptVal = document.getElementById("dept").value;
+    const marksVal = document.getElementById("marks").value.trim();
+
+    if (!nameVal || !rollVal || !marksVal) {
+      showToast("⚠️ All fields required (Name, Roll No, Marks)", "#d9534f");
+      return;
+    }
+    if (isNaN(marksVal) || marksVal < 0 || marksVal > 100) {
+      showToast("📊 Marks must be numeric (0-100)", "#e67e22");
+      return;
+    }
+
+    try {
+      await fetch(`${API}/${editId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: nameVal,
+          rollNo: rollVal,
+          department: deptVal,
+          marks: marksVal
+        })
+      });
+      clearForm();
+      resetUpdateMode(false);
+      editId = null;
+      await loadStudents();
+      showToast("✏️ Student record updated", "#2c7da0");
+    } catch (err) {
+      showToast("Update failed: backend error", "#a94442");
+    }
+  }
+
+  // Reset UI between add/update modes
+  function resetUpdateMode(isEditActive) {
+    const addBtn = document.querySelector(".add");
+    const updateBtn = document.querySelector(".update");
+    if (isEditActive) {
+      addBtn.style.display = "none";
+      updateBtn.style.display = "inline-flex";
+    } else {
+      addBtn.style.display = "inline-flex";
+      updateBtn.style.display = "none";
+    }
+  }
+
+  // Clear all form fields
+  function clearForm() {
+    document.getElementById("name").value = "";
+    document.getElementById("rollNo").value = "";
+    document.getElementById("dept").value = "Computer";
+    document.getElementById("marks").value = "";
+  }
+
+  // Lightweight toast notification system (non-intrusive)
+  let toastTimeout = null;
+  function showToast(message, bgColor = "#2c3e50") {
+    let toastEl = document.getElementById("dynamic-toast");
+    if (!toastEl) {
+      const div = document.createElement("div");
+      div.id = "dynamic-toast";
+      div.style.position = "fixed";
+      div.style.bottom = "24px";
+      div.style.left = "50%";
+      div.style.transform = "translateX(-50%)";
+      div.style.backgroundColor = bgColor;
+      div.style.color = "white";
+      div.style.padding = "12px 24px";
+      div.style.borderRadius = "60px";
+      div.style.fontWeight = "500";
+      div.style.fontSize = "0.85rem";
+      div.style.boxShadow = "0 15px 35px rgba(0,0,0,0.2)";
+      div.style.zIndex = "9999";
+      div.style.backdropFilter = "blur(8px)";
+      div.style.background = bgColor;
+      div.style.transition = "opacity 0.2s";
+      div.style.fontFamily = "'Inter', sans-serif";
+      div.style.letterSpacing = "0.3px";
+      div.style.border = "1px solid rgba(255,255,255,0.2)";
+      document.body.appendChild(div);
+      toastEl = div;
+    } else {
+      toastEl.style.backgroundColor = bgColor;
+      toastEl.style.background = bgColor;
+    }
+    toastEl.style.opacity = "1";
+    toastEl.textContent = message;
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+      toastEl.style.opacity = "0";
+    }, 2600);
+  }
+
+  // Manual reset if user clicks update mode without any existing id (guard)
+  window.resetFormManually = function() {
+    clearForm();
+    resetUpdateMode(false);
+    editId = null;
+    showToast("Form cleared, back to Add mode", "#3a6b8f");
+  };
+
+  // Attach optional reset listener
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      if (editId || document.querySelector(".update").style.display === "inline-flex") {
+        clearForm();
+        resetUpdateMode(false);
+        editId = null;
+        showToast("Editing cancelled", "#5a6268");
+      }
+    }
+  });
+
+  // Load initial data on page ready
+  loadStudents().catch(e => console.warn(e));
+</script>
+</body>
+</html>
